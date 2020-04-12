@@ -1,0 +1,115 @@
+<% layout('/layouts/default.html', {title: 'play_user管理', libs: ['dataGrid']}){ %>
+<div class="main-content">
+	<div class="box box-main">
+		<div class="box-header">
+			<div class="box-title">
+				<i class="fa icon-notebook"></i> ${text('用户管理')}
+			</div>
+			<div class="box-tools pull-right">
+				<a href="#" class="btn btn-default" id="btnSearch" title="${text('查询')}"><i class="fa fa-filter"></i> ${text('查询')}</a>
+				<% if(hasPermi('playuser:playUser:edit')){ %>
+					<a href="${ctx}/playuser/playUser/form" class="btn btn-default btnTool" title="${text('新增play_user')}"><i class="fa fa-plus"></i> ${text('新增')}</a>
+				<% } %>
+			</div>
+		</div>
+		<div class="box-body">
+			<#form:form id="searchForm" model="${playUser}" action="${ctx}/playuser/playUser/listData" method="post" class="form-inline hide"
+					data-page-no="${parameter.pageNo}" data-page-size="${parameter.pageSize}" data-order-by="${parameter.orderBy}">
+				<div class="form-group">
+					<label class="control-label">${text('昵称')}：</label>
+					<div class="control-inline">
+						<#form:input path="nickname" maxlength="50" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('头像')}：</label>
+					<div class="control-inline">
+						<#form:input path="img" maxlength="255" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('城市')}：</label>
+					<div class="control-inline">
+						<#form:input path="city" maxlength="255" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('用户登录凭证')}：</label>
+					<div class="control-inline">
+						<#form:input path="code" maxlength="10" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('unionid')}：</label>
+					<div class="control-inline">
+						<#form:input path="unionid" maxlength="50" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('openid')}：</label>
+					<div class="control-inline">
+						<#form:input path="openid" maxlength="50" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('加密随机字符串')}：</label>
+					<div class="control-inline">
+						<#form:input path="authkey" maxlength="10" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('createtime')}：</label>
+					<div class="control-inline">
+						<#form:input path="createtime" readonly="true" maxlength="20" class="form-control Wdate-datetime"
+							dataFormat="datetime" onclick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm',isShowClear:false});"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('updatetime')}：</label>
+					<div class="control-inline">
+						<#form:input path="updatetime" readonly="true" maxlength="20" class="form-control Wdate-datetime"
+							dataFormat="datetime" onclick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm',isShowClear:false});"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<button type="submit" class="btn btn-primary btn-sm">${text('查询')}</button>
+					<button type="reset" class="btn btn-default btn-sm">${text('重置')}</button>
+				</div>
+			</#form:form>
+			<table id="dataGrid"></table>
+			<div id="dataGridPage"></div>
+		</div>
+	</div>
+</div>
+<% } %>
+<script>
+// 初始化DataGrid对象
+$('#dataGrid').dataGrid({
+	searchForm: $("#searchForm"),
+	columnModel: [
+		{header:'${text("昵称")}', name:'nickname', index:'a.nickname', width:150, align:"left", frozen:true, formatter: function(val, obj, row, act){
+			return '<a href="${ctx}/playuser/playUser/form?id='+row.id+'" class="btnList" data-title="${text("编辑play_user")}">'+(val||row.id)+'</a>';
+		}},
+		{header:'${text("头像")}', name:'img', index:'a.img', width:150, align:"left"},
+		{header:'${text("城市")}', name:'city', index:'a.city', width:150, align:"left"},
+		{header:'${text("用户登录凭证")}', name:'code', index:'a.code', width:150, align:"left"},
+		{header:'${text("unionid")}', name:'unionid', index:'a.unionid', width:150, align:"left"},
+		{header:'${text("openid")}', name:'openid', index:'a.openid', width:150, align:"left"},
+		{header:'${text("加密随机字符串")}', name:'authkey', index:'a.authkey', width:150, align:"left"},
+		{header:'${text("createtime")}', name:'createtime', index:'a.createtime', width:150, align:"center"},
+		{header:'${text("updatetime")}', name:'updatetime', index:'a.updatetime', width:150, align:"center"},
+		{header:'${text("操作")}', name:'actions', width:120, sortable:false, title:false, formatter: function(val, obj, row, act){
+			var actions = [];
+			<% if(hasPermi('playuser:playUser:edit')){ %>
+				actions.push('<a href="${ctx}/playuser/playUser/form?id='+row.id+'" class="btnList" title="${text("编辑play_user")}"><i class="fa fa-pencil"></i></a>&nbsp;');
+				actions.push('<a href="${ctx}/playuser/playUser/delete?id='+row.id+'" class="btnList" title="${text("删除play_user")}" data-confirm="${text("确认要删除该play_user吗？")}"><i class="fa fa-trash-o"></i></a>&nbsp;');
+			<% } %>
+			return actions.join('');
+		}}
+	],
+	// 加载成功后执行事件
+	ajaxSuccess: function(data){
+		
+	}
+});
+</script>

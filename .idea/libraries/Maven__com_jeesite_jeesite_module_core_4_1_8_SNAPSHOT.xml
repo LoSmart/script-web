@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="Maven: com.jeesite:jeesite-module-core:4.1.8-SNAPSHOT">
+    <CLASSES>
+      <root url="jar://$MAVEN_REPOSITORY$/com/jeesite/jeesite-module-core/4.1.8-SNAPSHOT/jeesite-module-core-4.1.8-20200220.054459-5.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$MAVEN_REPOSITORY$/com/jeesite/jeesite-module-core/4.1.8-SNAPSHOT/jeesite-module-core-4.1.8-20200220.054459-5-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$MAVEN_REPOSITORY$/com/jeesite/jeesite-module-core/4.1.8-SNAPSHOT/jeesite-module-core-4.1.8-20200220.054459-5-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>
